@@ -9,46 +9,54 @@
 // ==/UserScript==
 
 (function() {
-    'use strict';
-    // Your code here...
-    setInterval(function(){
-        if(window.location.pathname == '/dorf1.php'){
-            var wood  = $('#l1').text();
-            var clay  = $('#l2').text();
-            var iron  = $('#l3').text();
-            var wheat = $('#l4').text();
-            var minRes = Math.min(wood, clay, iron, wheat);
-            var index = -1;
-            if(wood == minRes && $('#village_map > div.gid1.good').length>=1){
-                index = $('#village_map > div.gid1.good:eq(0)').index()+1;
-            }else if(clay == minRes && $('#village_map > div.gid2.good').length>=1){
-                index = $('#village_map > div.gid2.good:eq(0)').index()+1;
-            }else if(iron == minRes && $('#village_map > div.gid3.good').length>=1){
-                index = $('#village_map > div.gid3.good:eq(0)').index()+1;
-            }else if(wheat == minRes && $('#village_map > div.gid4.good').length>=1){
-                index = $('#village_map > div.gid4.good:eq(0)').index()+1;
-            }
-            console.log('index: '+index);
-            if(index != -1){
-                console.log('go to index: '+index);
-                window.location.href = 'https://ts20.travian.tw/build.php?id='+index;
-                if($('#build .section1 > button.green:not(.gold)').length >= 1)
-                    $('#build button.green:not(.gold)').click();
-            } else {
-                console.log('not go index: '+index);
-                location.reload();
-            }
-        } else if(window.location.pathname == '/build.php'){
-            console.log('length:' + $('#build .section1 > button.green:not(.gold)').length);
-            if($('#build .section1 > button.green:not(.gold)').length >= 1){
-                console.log('build');
-                $('#build button.green:not(.gold)').click();
-            } else {
-                console.log('not build');
-                location.reload();
-            }
-        } else {
-            window.location.href = 'https://ts20.travian.tw//dorf1.php';
-        }
-    }, 1000*55+Math.random()*10000);
+  'use strict';
+
+  var host = 'https://ts20.travian.tw/';
+
+  function find_min_resourse_index(){
+    if($('#stockBarFreeCrop').text() < 10)
+      return 4;
+
+    var wood = $('#l1').text(),
+        clay = $('#l2').text(),
+        iron = $('#l3').text(),
+        crop = $('#l4').text();
+    var minRes = Math.min(wood, clay, iron, crop);
+    if(wood == minRes)
+      return 1;
+    else if(clay == minRes)
+      return 2;
+    else if(iron == minRes)
+      return 3;
+    else if(crop == minRes)
+      return 4;
+    else
+      return 2;
+  }
+
+  setInterval(function(){
+    if(window.location.pathname == '/dorf1.php'){
+      var min_resourse_index = find_min_resourse_index();
+      var min_resourse_html_objs = $('#village_map > div.gid'+min_resourse_index+'.good');
+      if(min_resourse_html_objs.length>=1) {
+        console.log('goto build: '+($('#village_map > div.gid4.good:eq(0)').index()+1));
+        window.location.href = host+'build.php?id='+($('#village_map > div.gid4.good:eq(0)').index()+1);
+      } else {
+        console.log('not goto build');
+        location.reload();
+      }
+    } else if(window.location.pathname == '/build.php'){
+      var upgrade_btn = $('#build .section1 > button.green:not(.gold)');
+      if(upgrade_btn.length >= 1){
+        console.log('click build');
+        upgrade_btn.click();
+      } else {
+        console.log('not click build');
+        location.reload();
+      }
+    } else {
+      console.log('nothing: '+window.location.href);
+      window.location.href = host+'dorf1.php';
+    }
+  }, 1000*60);
 })();
