@@ -87,7 +87,7 @@ function need_to_upgrade_Granary() {
   var result = stockBarGranary/Math.max(pd.crop);
   console.log('need_to_upgrade_Granary: '+result+', stockBarGranary: '+
     stockBarGranary+', max:'+Math.max(pd.crop));
-  return result < 5;
+  return result < 6;
 }
 function upgrade_warehouse(){
   localStorage.state = 'build';
