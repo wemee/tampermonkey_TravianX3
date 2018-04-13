@@ -118,12 +118,13 @@ function can_go_adventure(){
   var hour = (new Date).getHours();
   var ad_cnt = adventure_count();
 
-  // 6~12點之間 存次數 隔天過任務
+  // 3次以上 直接去冒險
   if(ad_cnt>=3){
     console.log('ad_cnt>=3');
     return true;
   }
-  if((hour<6 || hour>12) && ad_cnt>=1){
+  // 0~12點之間 存次數 隔天過任務
+  if(hour>=12 && ad_cnt>=1){ // if((hour<6 || hour>=12) && ad_cnt>=1){
     console.log('hour<6 && hour>12 && ad_cnt>=1');
     return true;
   }
