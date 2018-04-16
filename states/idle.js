@@ -23,7 +23,7 @@ function need_to_upgrade_warehouse() {
   var result = stockBarWarehouse/Math.max(pd.wood, pd.clay, pd.iron);
   console.log('need_to_upgrade_warehouse: '+result+', stockBarWarehouse: '+
     stockBarWarehouse+', max:'+Math.max(pd.wood, pd.clay, pd.iron));
-  return result < 6;
+  return result < 10;
 }
 function need_to_upgrade_Granary() {
   if($('#content > div.boxes.buildingList > div.boxes-contents.cf > ul').find('li .name').text().match(/穀倉/)){
@@ -40,7 +40,7 @@ function need_to_upgrade_Granary() {
   var result = stockBarGranary/Math.max(pd.crop);
   console.log('need_to_upgrade_Granary: '+result+', stockBarGranary: '+
     stockBarGranary+', max:'+Math.max(pd.crop));
-  return result < 6;
+  return result < 10;
 }
 function upgrade_warehouse(){
   localStorage.state = 'build';
@@ -71,18 +71,76 @@ function can_go_adventure(){
   var hour = (new Date).getHours();
   var ad_cnt = adventure_count();
 
-  // 3次以上 直接去冒險
-  if(ad_cnt>=3){
+  // 2次以上 直接去冒險
+  if(ad_cnt>1){
     console.log('ad_cnt>=3');
     return true;
   }
   // 0~12點之間 存次數 隔天過任務
-  if(hour>=12 && ad_cnt>=1){ // if((hour<6 || hour>=12) && ad_cnt>=1){
+  if(hour>=12 && ad_cnt>0){ // if((hour<6 || hour>=12) && ad_cnt>=1){
     console.log('hour<6 && hour>12 && ad_cnt>=1');
     return true;
   }
   console.log('不能冒險 - ad_cnt:'+ad_cnt+", hour:"+ hour);
   return false;
+}
+
+function is_villange_building(){
+  if($('#content > div.boxes.buildingList > div.boxes-contents.cf > ul').find('li .name').text().match(/市場|鋼鐵鑄造廠|村莊大樓|行宮/)){
+    console.log('村莊 興建中');
+    return true;
+  }
+  return false;
+}
+function tmp(){
+  // return false;
+
+
+  // if(localStorage.clay_f_level >= 3){
+  //   return false;
+  // }
+  // if($('#content > div.boxes.buildingList > div.boxes-contents.cf > ul').find('li .name').text().match(/磚廠/)){
+  //   console.log('磚廠 興建中');
+  //   return false;
+  // }
+  // localStorage.clay_f_level++;
+  // return true;
+
+  //////////////////////////////////////////////////////////////////////////////
+  // if($('#village_map > div.gid1.level10').length==1 && localStorage.wood_f_level<3) { // 資源廠可以先升到3級
+  //   console.log('資源廠可以先升到3級');
+  //   return true;
+  // } else {
+  //   console.log('not 資源廠可以先升到3級');
+  //   return false;
+  // }
+  //////////////////////////////////////////////////////////////////////////////
+  if(is_villange_building()){
+    console.log('1 行宮 興建中');
+    return false;
+  }
+  return localStorage.residence_level < 10
+}
+function can_main_building(){
+  if(is_villange_building()){
+    console.log('2 村莊大樓 興建中');
+    return false;
+  }
+  return localStorage.main_building_level < 15
+}
+function can_iron_f(){
+  if(is_villange_building()){
+    console.log('3 村莊 興建中');
+    return false;
+  }
+  return localStorage.iron_f_level < 4;
+}
+function can_market_f(){
+  if(is_villange_building()){
+    console.log('3 村莊 興建中');
+    return false;
+  }
+  return localStorage.marke_level < 9;
 }
 function idle(){
   console.log("idle");
@@ -98,7 +156,38 @@ function idle(){
   }
   //////////////////////////////////////////
 
-  if(can_go_adventure()){
+  if(tmp()){
+    console.log('tmp');
+    // window.location.href = host+'build.php?id=27&category=3';
+    // if($('#build > div.buildingWrapper > h2:contains("鋸木廠")').length >= 1){
+    //   console.log('新建')
+    //   $('#build > div.buildingWrapper > h2:contains("鋸木廠")').siblings('.contract.contractNew.contractWrapper').find('button').click();
+    // } else {
+    //   console.log('not 新建')
+    //   localStorage.state = 'build';
+    // }
+    //////////////////////////////////////////
+
+    console.log('升級行宮')
+    localStorage.residence_level++;
+    localStorage.state = 'build';
+    window.location.href = host+'build.php?id=33';
+  } else if(can_iron_f()){
+    console.log('升級鐵礦廠')
+    localStorage.iron_f_level++;
+    localStorage.state = 'build';
+    window.location.href = host+'build.php?id=34';
+  } else if(can_main_building()){
+    console.log('升級市場')
+    localStorage.marke_level++;
+    localStorage.state = 'build';
+    window.location.href = host+'build.php?id=19';
+  } else if(can_main_building()){
+    console.log('升級村莊大樓')
+    localStorage.main_building_level++;
+    localStorage.state = 'build';
+    window.location.href = host+'build.php?id=26';
+  } else if(can_go_adventure()){
     adventures();
   } else if(need_to_upgrade_warehouse()) {
     upgrade_warehouse();
@@ -108,3 +197,5 @@ function idle(){
     upgradeRes();
   }
 }
+// https://ts20.travian.tw/dorf2.php?a=34&c=f1a7fd
+// https://ts20.travian.tw/dorf1.php?newdid=2581&
