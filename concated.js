@@ -244,6 +244,8 @@ function idle(){
     upgradeRes();
   }
 }
+// https://ts20.travian.tw/dorf2.php?a=34&c=f1a7fd
+// https://ts20.travian.tw/dorf1.php?newdid=2581&
 function adventures(){
   localStorage.state = 'adventures';
   console.log('adventures');
@@ -364,7 +366,7 @@ function upgradeRes(){
     });
   }
 }
-var host = 'https://ts20.travian.tw/';
+var host = window.location.origin+'/';
 
 (function() {
   'use strict';
@@ -374,26 +376,26 @@ var host = 'https://ts20.travian.tw/';
     $('#content > div.outerLoginBox > div.innerLoginBox > form input[name="name"]').val('wemee7012@gmail.com');
     $('#content > div.outerLoginBox > div.innerLoginBox > form input[name="password"]').val('70121127');
     $('#s1 > div > div.button-content').click();
-  } else {
-    if(typeof(localStorage.state)==="undefined")
-      localStorage.state = "idle";
-
-    switch(localStorage.state) {
-      case "idle":
-        idle();
-        break;
-      case "adventures":
-        adventures();
-        break;
-      case "build":
-        build();
-        break;
-      case "upgradeRes":
-        upgradeRes();
-        break;
-      default:
-        console.log('nothing: '+window.location.href+ ", state: " +localStorage.state);
-    }
   }
+  // else {
+  //   if(typeof(localStorage.state)==="undefined")
+  //     localStorage.state = "idle";
+  //
+  //   switch(localStorage.state) {
+  //     case "idle":
+  //       idle();
+  //       break;
+  //     case "adventures":
+  //       adventures();
+  //       break;
+  //     case "build":
+  //       build();
+  //       break;
+  //     case "upgradeRes":
+  //       upgradeRes();
+  //       break;
+  //     default:
+  //       console.log('nothing: '+window.location.href+ ", state: " +localStorage.state);
+  //   }
+  // }
 })();
-// https://ts20.travian.tw/dorf2.php?a=34&c=f1a7fd
