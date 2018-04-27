@@ -12,16 +12,82 @@
 (function() {
   'use strict';
 
-  var task =
-
   $.noConflict();
   jQuery( document ).ready(function( $ ) {
-    setTimeout(function(){
-      $('#build > form > div > div:nth-child(4) > div.details > a').click();
+    var Server = 'tx8000';
+
+    function hero_adventure_count(){
+      return parseInt(jQuery('#sidebarBoxHero .speechBubbleContent').text());
+    }
+    console.log($('#movements .mov').length);
+    console.log(hero_adventure_count());
+
+    if(typeof(localStorage.state)=="undefined"){
+      localStorage.state = "idle";
+    }
+//http://www.fightlands.biz/tx8000/a2b.php?z=344054
+    console.log(localStorage.state);
+    // 24|-29
+    if(localStorage.state == 'attack'){
+      if(window.location.pathname.match(/a2b/)){
+        if(jQuery('#short_info').length==0){
+          // $('#troops a:eq(0)').click();
+          // $('#troops a:eq(3)').click();
+          // $('#troops a:eq(4)').click();
+          // $('#troops a:eq(5)').click();
+          // $('#troops a:eq(6)').click();
+          // $('#troops a:eq(7)').click();
+          $('#troops a').click();
+          $('#content > form > div.option > label:nth-child(3) > input').click();
+          $('input[name="x"]').val('24');
+          $('input[name="y"]').val('-29');
+          $('form[name="snd"]').submit();
+        } else {
+          $('select[name="ctar2"]').val(0);
+          $('#content > form').submit();
+        }
+      } else {
+        setTimeout(function(){
+          window.location.href = "http://www.fightlands.biz/"+Server+"/a2b.php";
+        }, 1000*60*2);
+      }
+    } else if(localStorage.state == 'hero_adventure'){
+      if(window.location.pathname.match(/hero_adventure/)){
+        // window.location.pathname='/'+Server+'/hero_adventure.php';
+        // $('a.gotoAdventure').click();
+        console.log('1');
+        window.location.href = "http://www.fightlands.biz/"+Server+"/"+$('a.gotoAdventure:eq(0)').attr('href');
+      } else {
+        localStorage.state = "idle";
+        $('#btn_ok > div > div.button-content').click();
+      }
+    } else if(localStorage.state == 'idle'){
+      if(!window.location.pathname.match(/dorf1/)){
+        window.location.pathname='/'+Server+'/dorf1.php';
+      } else {
+        if(hero_adventure_count()>1 && $('#movements .mov').length<1) {
+          localStorage.state = 'hero_adventure';
+          window.location.pathname='/'+Server+'/hero_adventure.php';
+        } else {
+          localStorage.state = 'trainTroops';
+          window.location.href = "http://www.fightlands.biz/"+Server+"/build.php?id=27";
+        }
+      }
+    } else if(localStorage.state == 'trainTroops') {
       setTimeout(function(){
-        $('#build > form > button').click();
-      }, 1000*5);
-    }, 1000*60*3);
+        // $('#build > form > div > div:nth-child(1) > div.details > a').click(); // 羅
+        // $('#build > form > div > div:nth-child(4) > div.details > a').click(); // 禁
+        $('#build > form > div > div:nth-child(7) > div.details > a').click(); // 帝
+        setTimeout(function(){
+          localStorage.state = 'idle';
+          $('#build > form > button').click();
+        }, 1000*5);
+      }, 1000*60*10);
+    } else {
+      console.log('Error');
+    }
+
+
     // function min(arr, compare){
     //   var tmp=arr[0];
     //   for(var idx in arr){
@@ -32,7 +98,7 @@
     //   return tmp;
     // }
     //
-    // var Server = 'tx10000';
+    // var Server = 'tx8000';
     // if(typeof(localStorage.state)=="undefined"){
     //   localStorage.state = 'dorf1';
     // }
