@@ -40,15 +40,36 @@
           // $('#troops a:eq(6)').click();
           // $('#troops a:eq(7)').click();
           $('#troops > tbody > tr > td:eq(0) > a').click();
+          // $('#troops > tbody > tr > td:eq(6) > a').click(); // 投石車
           $('#troops > tbody > tr > td:eq(8) > a').click();
-          $('#troops > tbody > tr > td:eq(11) > a').click();
-          $('#content > form > div.option > label:nth-child(5) > input').click();
-          // 去打 -3|41
-          $('input[name="x"]').val('-3');
-          $('input[name="y"]').val('41');
+          // $('#troops > tbody > tr > td:eq(11) > a').click(); // 英雄 // 先不要 避免要復活
+          // $('#content > form > div.option > label:nth-child(3) > input').click(); // normal attack
+          $('#content > form > div.option > label:nth-child(5) > input').click(); // raid
+
+          var to_attack = [
+            // {x:'-18',y:'36'}, // 有兵 // 變Natars了
+            // {x:'-14',y:'36'}, // 會反擊 // 變Natars了
+            // {x:'-24',y:'38'}, // 會反擊
+            {x:'-16', y:'36'}, // 會反擊
+
+            {x:'-13', y:'39'},
+            {x:'-13', y:'40'},
+            {x:'-12', y:'40'},
+            {x:'-12', y:'41'},
+          ];
+
+          var idx = parseInt(Math.random()*10/2);
+          var x = to_attack[idx].x;
+          var y = to_attack[idx].y;
+          // -14|38
+          // -24|38 會反擊 -16|36
+          // 10, 171, 2.82843:x
+          // x = 171*2.82843/10
+          $('input[name="x"]').val(x);
+          $('input[name="y"]').val(t);
           $('form[name="snd"]').submit();
         } else { //有車的狀況
-          // $('select[name="ctar2"]').val(0)
+          // $('select[name="ctar2"]').val(0) // 兩個隨機攻擊
           localStorage.state = 'trainTroops';
           $('#content > form').submit();
         }
@@ -81,14 +102,14 @@
           window.location.pathname='/'+Server+'/hero_adventure.php';
         } else {
           // localStorage.state = 'trainTroops';
+          // window.location.href = "http://www.fightlands.biz/"+Server+"/build.php?id=28"; // 28 // 32
           localStorage.state = 'attack';
           window.location.href = "http://www.fightlands.biz/"+Server+"/a2b.php";
-          // window.location.href = "http://www.fightlands.biz/"+Server+"/build.php?id=28";
         }
       }
     } else if(localStorage.state == 'trainTroops') {
-      if(window.location.href != "http://www.fightlands.biz/"+Server+"/build.php?id=28"){
-        window.location.href = "http://www.fightlands.biz/"+Server+"/build.php?id=28";
+      if(window.location.href != "http://www.fightlands.biz/"+Server+"/build.php?id=28"){ // 28 // 32
+        window.location.href = "http://www.fightlands.biz/"+Server+"/build.php?id=28"; // 28 // 32
       } else {
         setTimeout(function(){
           if(Math.random() < 0.01){
@@ -102,7 +123,7 @@
           setTimeout(function(){
             localStorage.state = 'idle';
             $('#build > form > button').click();
-          }, 1000*60*4);
+          }, 1000*60*2);
         }, 1000*5);
       }
     } else {
