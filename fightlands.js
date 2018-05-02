@@ -39,12 +39,22 @@
           // $('#troops a:eq(5)').click();
           // $('#troops a:eq(6)').click();
           // $('#troops a:eq(7)').click();
+
           $('#troops > tbody > tr > td:eq(0) > a').click();
+          // $('#troops > tbody > tr > td:eq(0) > input').val(30000000);
+
           // $('#troops > tbody > tr > td:eq(6) > a').click(); // 投石車
+          // $('#troops > tbody > tr > td:eq(6) > input').val(110000);
+
           $('#troops > tbody > tr > td:eq(8) > a').click();
+          // $('#troops > tbody > tr > td:eq(8) > input').val(2500000);
+
+          // $('#troops > tbody > tr > td:eq(9) > a').click();
+          // $('#troops > tbody > tr > td:eq(8) > input').val(2500000);
+
           // $('#troops > tbody > tr > td:eq(11) > a').click(); // 英雄 // 先不要 避免要復活
-          // $('#content > form > div.option > label:nth-child(3) > input').click(); // normal attack
-          $('#content > form > div.option > label:nth-child(5) > input').click(); // raid
+          $('#content > form > div.option > label:nth-child(3) > input').click(); // normal attack
+          // $('#content > form > div.option > label:nth-child(5) > input').click(); // raid
 
           var to_attack = [
             // {x:'-18',y:'36'}, // 有兵 // 變Natars了
@@ -58,18 +68,38 @@
             {x:'-12', y:'41'},
           ];
 
+          // 新 -18 39
+          // -13 35
+          // 車 -10 36
+          // 車 -10 37
+
+          // 羊
+          // -13 39
+          // -13 40
+          // -12 40
+          // -12 41
+          // -11 39
+
+          // 大肥羊
+          // -12 39
+          // -18 36
+
+          // Dandy from village 01 Zutphen
+          // arni from village arnis village
+
           var idx = parseInt(Math.random()*10/2);
-          var x = to_attack[idx].x;
-          var y = to_attack[idx].y;
+          var x = -10;//to_attack[idx].x;
+          var y = Math.random()<0.8 ? 36:37; // ;//to_attack[idx].y;
           // -14|38
           // -24|38 會反擊 -16|36
           // 10, 171, 2.82843:x
           // x = 171*2.82843/10
           $('input[name="x"]').val(x);
-          $('input[name="y"]').val(t);
+          $('input[name="y"]').val(y);
           $('form[name="snd"]').submit();
         } else { //有車的狀況
-          // $('select[name="ctar2"]').val(0) // 兩個隨機攻擊
+          // $('select[name="ctar1"]').val(3); // 鐵 兩個隨機攻擊
+          // $('select[name="ctar2"]').val(0); // 米 兩個隨機攻擊
           localStorage.state = 'trainTroops';
           $('#content > form').submit();
         }
@@ -123,7 +153,7 @@
           setTimeout(function(){
             localStorage.state = 'idle';
             $('#build > form > button').click();
-          }, 1000*60*2);
+          }, 1000*60*1.5);
         }, 1000*5);
       }
     } else {
